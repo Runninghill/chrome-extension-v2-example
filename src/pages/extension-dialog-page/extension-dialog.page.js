@@ -1,0 +1,1 @@
+console.log('Extension dialog page js loaded');

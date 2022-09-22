@@ -1,5 +1,6 @@
 node_modules
 build
 secrets.*.js
-
 .DS_Store
+.vscode
+.idea

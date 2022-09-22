@@ -1,4 +1,4 @@
-var webpack = require("webpack"),
+const webpack = require("webpack"),
     path = require("path"),
     fileSystem = require("fs"),
     env = require("./utils/env"),
@@ -8,26 +8,28 @@ var webpack = require("webpack"),
     WriteFilePlugin = require("write-file-webpack-plugin");
 
 // load the secrets
-var alias = {};
-
-var secretsPath = path.join(__dirname, ("secrets." + env.NODE_ENV + ".js"));
-
-var fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2"];
+let alias = {};
+let secretsPath = path.join(__dirname, ("secrets." + env.NODE_ENV + ".js"));
+let fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2"];
 
 if (fileSystem.existsSync(secretsPath)) {
   alias["secrets"] = secretsPath;
 }
 
-var options = {
+let options = {
   mode: process.env.NODE_ENV || "development",
+  // Define Javascript files under the entry key
   entry: {
-    popup: path.join(__dirname, "src", "js", "popup.js"),
-    options: path.join(__dirname, "src", "js", "options.js"),
-    background: path.join(__dirname, "src", "js", "background.js")
+    background: path.join(__dirname, "src", "background-script.js"),
+    contentScript: path.join(__dirname, "src", "content-script.js"),
+    extensionDialogPage: path.join(__dirname, "src", "pages", "extension-dialog-page", "extension-dialog.page.js"),
   },
   output: {
     path: path.join(__dirname, "build"),
     filename: "[name].bundle.js"
+  },
+  chromeExtensionBoilerplate: {
+    notHotReload: ["contentScript"]
   },
   module: {
     rules: [
@@ -61,7 +63,7 @@ var options = {
     new CopyWebpackPlugin([{
       from: "src/manifest.json",
       transform: function (content, path) {
-        // generates the manifest file using the package.json informations
+        // Adds the description and version in the package.json to the manifest.json file
         return Buffer.from(JSON.stringify({
           description: process.env.npm_package_description,
           version: process.env.npm_package_version,
@@ -69,20 +71,11 @@ var options = {
         }))
       }
     }]),
+    // Define html files under the plugins key using the HtmlWebpackPlugin (one entry per html file)
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "popup.html"),
-      filename: "popup.html",
-      chunks: ["popup"]
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "options.html"),
-      filename: "options.html",
-      chunks: ["options"]
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "background.html"),
-      filename: "background.html",
-      chunks: ["background"]
+      template: path.join(__dirname, "src", "pages", "extension-dialog-page", "extension-dialog.page.html"),
+      filename: "extension-dialog.page.html",
+      chunks: ["extension-dialog.page"]
     }),
     new WriteFilePlugin()
   ]
