@@ -1,7 +1,7 @@
 {
   "name": "Chrome Extension v2 Example",
   "manifest_version": 2,
-  "permissions": [],
+  "permissions": ["storage"],
   "background": {
     "scripts": ["background.bundle.js"]
   },
