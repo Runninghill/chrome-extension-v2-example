@@ -8,15 +8,25 @@
                 min-width: 300px;
             }
 
-            h3 {
-                color: #1a1a1a;
+            input[type=number] {
+                max-width: 75px;
             }
         </style>
     </head>
     <body>
-        <h3>Chrome Extension Webpack Boilerplate</h3>
+        <h4>Date of Birth Settings</h4>
 
-        <p>It works! ^_^</p>
+        <div style="margin-bottom: 10px">
+            <label for="minimum-age-input">Minimum Age</label>
+            <input id="minimum-age-input" type="number">
+        </div>
+
+        <div>
+            <label for="maximum-age-input">Maximum Age</label>
+            <input id="maximum-age-input" type="number">
+        </div>
+
+        <button id="save-button">Save</button>
 
         <script src="extensionDialogPage.bundle.js"></script>
     </body>

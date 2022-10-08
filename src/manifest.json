@@ -1,5 +1,5 @@
 {
-  "name": "Chrome Extension Webpack Boilerplate",
+  "name": "Chrome Extension v2 Example",
   "manifest_version": 2,
   "permissions": [],
   "background": {
